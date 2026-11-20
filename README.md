@@ -18,6 +18,8 @@
   - [Cercle](#cercle)
   - [Animation](#animation)
   - [Mosaïque](#mosaïque)
+  - [Filtres séparables](#filtres-séparables)
+  - [Différence de gaussiennes](#différence-de-gaussiennes)
   
 - ⭐⭐(⭐)
   - [Disque](#disque)
@@ -35,8 +37,6 @@
 - ⭐⭐⭐⭐
   - [Mosaïque miroir](#mosaïque-miroir)
   - [Convolutions](#convolutions)
-  - [Filtres séparables](#filtres-séparables)
-  - [Différence de gaussiennes](#différence-de-gaussiennes)
 
 ---
 
@@ -129,6 +129,20 @@
 | ![mosaïque](./output/mosaique.png) | ![logo](./images/logo.png) |
 
 
+### Filtres séparables
+
+| Naïf | Séparé | Base |
+|:---:|:---:|:---:|
+| ![box blur naïf](./output/box_blur_naif.png) | ![box blur séparé](./output/box_blur_separe.png) | ![logo](./images/logo.png) |
+
+
+### Différence de gaussiennes
+
+| Filtre | Base |
+|:---:|:---:|
+| ![différence de gaussiennes](./output/difference_gaussiennes.png) | ![photo](./images/photo.jpg) |
+
+
 ## ⭐⭐(⭐)
 
 ### Disque
@@ -167,12 +181,16 @@
 |:---:|:---:|:---:|
 | ![dégradé couleur](./output/gradende_couleur.png) | ![dégradé rouge vert](./output/degrade_rouge_vert.png) | ![dégradé lab](./output/degrade_lab.png) |
 
+* on voit clairement la différence entre les espèce colorimétriques *
+
 
 ### Tramage
 
 | Filtre | Base |
 |:---:|:---:|
 | ![tramage](./output/tramage.png) | ![photo](./images/photo.jpg) |
+
+* merci Brett, l'explication m'a permis de me débloquer sur la précision *
 
 
 ### Fractale de Mandelbrot
@@ -197,16 +215,4 @@
 |:---:|:---:|
 | ![box blur](./output/box_blur.png) | ![logo](./images/logo.png) |
 
-
-### Filtres séparables
-
-| Naïf | Séparé | Base |
-|:---:|:---:|:---:|
-| ![box blur naïf](./output/box_blur_naif.png) | ![box blur séparé](./output/box_blur_separe.png) | ![logo](./images/logo.png) |
-
-
-### Différence de gaussiennes
-
-| Filtre | Base |
-|:---:|:---:|
-| ![différence de gaussiennes](./output/difference_gaussiennes.png) | ![photo](./images/photo.jpg) |
+* merci la vidéo YT qui explique très bien comment faire *
