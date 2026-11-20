@@ -27,10 +27,14 @@
   - [Glitch](#glitch)
 
 - ⭐⭐⭐(⭐)
-  - [Dégradés couleur](#dégradés-dans-lespace-de-couleur-lab)
+  - [Dégradés couleur](#dégradés-couleur)
+  - [Tramage](#tramage)
 
 - ⭐⭐⭐⭐
   - [Mosaïque miroir](#mosaïque-miroir)
+  - [Convolutions](#convolutions)
+  - [Filtres séparables](#filtres-séparables)
+  - [Différence de gaussiennes](#différence-de-gaussiennes)
 
 ---
 
@@ -128,6 +132,13 @@
 ### Dégradés couleur
 
 ![dégradé couleur](./output/gradende_couleur.png)
+![dégradé rouge vert](./output/degrade_rouge_vert.png)
+![dégradé lab](./output/degrade_lab.png)
+
+
+### Tramage
+
+![tramage](./output/tramage.png)
 
 
 ## ⭐⭐⭐⭐
@@ -136,3 +147,19 @@
 
 ![mosaïque miroir](./output/mosaique_miroir.png)
 * pris du temps à décoder mathématiquement comment faire pour les miroirs mais une fois fait pas de soucis pour le code *
+
+
+### Convolutions
+
+![box blur](./output/box_blur.png)
+
+
+### Filtres séparables
+
+![box blur naïf](./output/box_blur_naif.png)
+![box blur séparé](./output/box_blur_separe.png)
+
+
+### Différence de gaussiennes
+
+![différence de gaussiennes](./output/difference_gaussiennes.png)

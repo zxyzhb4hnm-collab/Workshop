@@ -2,6 +2,73 @@
 #include "random.hpp"
 #include <vector>
 
+// ---------- fonctions principales ---------- //
+
+float niveau_de_gris(glm::vec3 color){
+    return 0.2126f * color.r
+         + 0.7152f * color.g
+         + 0.0722f * color.b;
+}
+
+void noir_et_blanc(sil::Image& image){
+    for (glm::vec3& color : image.pixels()){
+        float gris = niveau_de_gris(color);
+        color = glm::vec3{gris, gris, gris};
+    }
+}
+
+void changer_luminosite(sil::Image& image, float puissance){
+    for (glm::vec3& color : image.pixels()){
+        color.r = std::pow(color.r, puissance);
+        color.g = std::pow(color.g, puissance);
+        color.b = std::pow(color.b, puissance);
+    }
+}
+
+sil::Image degrade(glm::vec3 couleur_gauche, glm::vec3 couleur_droite){
+    sil::Image image{300, 200};
+    for (int y{0}; y < image.height(); y++)
+    {
+        for (int x{0}; x < image.width(); x++)
+        {
+            float t = (float)(x) / (image.width() - 1);
+            image.pixel(x, y) = glm::mix(couleur_gauche, couleur_droite, t);
+        }
+    }
+    return image;
+}
+
+float distance_entre(float x, float y, float centre_x, float centre_y){
+    return std::sqrt((x - centre_x) * (x - centre_x) + (y - centre_y) * (y - centre_y));
+}
+
+void dessiner_disque(sil::Image& image, float centre_x, float centre_y, float rayon){
+    for (int y{0}; y < image.height(); y++)
+    {
+        for (int x{0}; x < image.width(); x++)
+        {
+            if (distance_entre(x, y, centre_x, centre_y) <= rayon){
+                image.pixel(x, y) = glm::vec3{1.f, 1.f, 1.f};
+            }
+        }
+    }
+}
+
+void dessiner_cercle(sil::Image& image, float centre_x, float centre_y, float rayon, float thickness){
+    for (int y{0}; y < image.height(); y++)
+    {
+        for (int x{0}; x < image.width(); x++)
+        {
+            float distance = distance_entre(x, y, centre_x, centre_y);
+            if (distance >= rayon - thickness / 2 && distance <= rayon + thickness / 2){
+                image.pixel(x, y) = glm::vec3{1.f, 1.f, 1.f};
+            }
+        }
+    }
+}
+
+// ---------- exos ---------- //
+
 //vert
 void exo_vert(){
     sil::Image image{"images/logo.png"};
@@ -27,16 +94,7 @@ void exo_swap(){
 //noir et blanc
 void exo_noir_et_blanc(){
     sil::Image image{"images/logo.png"};
-
-    for (glm::vec3& color : image.pixels()){
-        float gris = 0.2126f * color.r
-                   + 0.7152f * color.g
-                   + 0.0722f * color.b;
-        color.r = gris;
-        color.g = gris;
-        color.b = gris;
-    }
-
+    noir_et_blanc(image);
     image.save("output/n&b.png");
 }
 
@@ -45,9 +103,7 @@ void exo_negatif(){
     sil::Image image{"images/logo.png"};
 
     for (glm::vec3& color : image.pixels()){
-        color.r = 1-color.r;
-        color.g = 1-color.g;
-        color.b = 1-color.b;
+        color = 1.f - color;
     }
 
     image.save("output/negatif.png");
@@ -55,18 +111,7 @@ void exo_negatif(){
 
 //degrade
 void exo_degrade(){
-    sil::Image image{300, 200};
-    for (int y{0}; y < image.height(); y++)
-    {
-        for (int x{0}; x < image.width(); x++)
-        {
-            float valeur = (float)x / (image.width() - 1);
-            image.pixel(x, y).r = valeur;
-            image.pixel(x, y).g = valeur;
-            image.pixel(x, y).b = valeur;
-        }
-    }
-    image.save("output/gradende.png");
+    degrade({0.f, 0.f, 0.f}, {1.f, 1.f, 1.f}).save("output/gradende.png");
 }
 
 //miroir
@@ -106,7 +151,6 @@ void exo_rotation_90(){
         for (int x{0}; x < image.width(); x++)
         {
             nouvelle.pixel(image.height() - 1 - y, x) = image.pixel(x, y);
-
         }
     }
     nouvelle.save("output/rotation.png");
@@ -137,71 +181,28 @@ void exo_rgb_split(){
 //luminosite (eclaircir)
 void exo_luminosite_eclaircir(){
     sil::Image image{"images/photo.jpg"};
-
-    for (glm::vec3& color : image.pixels()){
-        color.r = std::pow(color.r, 0.6f);
-        color.g = std::pow(color.g, 0.6f);
-        color.b = std::pow(color.b, 0.6f);
-    }
-
+    changer_luminosite(image, 0.6f);
     image.save("output/eclaircie.png");
 }
 
 //luminosite (assombrir)
 void exo_luminosite_assombrir(){
     sil::Image image{"images/photo.jpg"};
-
-    for (glm::vec3& color : image.pixels()){
-        color.r = std::pow(color.r, 1.6f);
-        color.g = std::pow(color.g, 1.6f);
-        color.b = std::pow(color.b, 1.6f);
-    }
-
+    changer_luminosite(image, 1.6f);
     image.save("output/assombrie.png");
 }
 
-// disque
+//disque
 void exo_disque(){
     sil::Image image{500, 500};
-    float centre_x{250.f};
-    float centre_y{250.f};
-    float rayon{100.f};
-
-    for (int y{0}; y < image.height(); y++)
-    {
-        for (int x{0}; x < image.width(); x++)
-        {
-            float distance = std::sqrt((x - centre_x) * (x - centre_x) + (y - centre_y) * (y - centre_y));
-            if (distance <= rayon){
-                image.pixel(x, y).r = 1.f;
-                image.pixel(x, y).g = 1.f;
-                image.pixel(x, y).b = 1.f;
-            }
-        }
-    }
+    dessiner_disque(image, 250.f, 250.f, 100.f);
     image.save("output/disque.png");
 }
 
 //cercle
 void exo_cercle(){
     sil::Image image{500, 500};
-    float centre_x{250.f};
-    float centre_y{250.f};
-    float rayon{100.f};
-    float thickness{10.f};
-
-    for (int y{0}; y < image.height(); y++)
-    {
-        for (int x{0}; x < image.width(); x++)
-        {
-            float distance = std::sqrt((x - centre_x) * (x - centre_x) + (y - centre_y) * (y - centre_y));
-            if (distance >= rayon - thickness / 2 && distance <= rayon + thickness / 2){
-                image.pixel(x, y).r = 1.f;
-                image.pixel(x, y).g = 1.f;
-                image.pixel(x, y).b = 1.f;
-            }
-        }
-    }
+    dessiner_cercle(image, 250.f, 250.f, 100.f, 10.f);
     image.save("output/cercle.png");
 }
 
@@ -212,19 +213,8 @@ void exo_animation(){
     {
         sil::Image image{200, 200};
         float centre_x = rayon + i * (200 - 2 * rayon) / 59;
-        float centre_y{100.f};
-        for (int y{0}; y < image.height(); y++)
-        {
-            for (int x{0}; x < image.width(); x++)
-            {
-                float distance = std::sqrt((x - centre_x) * (x - centre_x) + (y - centre_y) * (y - centre_y));
-                if (distance <= rayon){
-                    image.pixel(x, y).r = 1.f;
-                    image.pixel(x, y).g = 1.f;
-                    image.pixel(x, y).b = 1.f;
-                }
-            }
-        }
+        dessiner_disque(image, centre_x, 100.f, rayon);
+
         std::string numero = std::to_string(i);
         if (i < 10) numero = "0" + numero;
         image.save("output/animation/frame_" + numero + ".png");
@@ -240,28 +230,16 @@ void exo_rosace(){
     float thickness{5.f};
     float pi{3.14159265f};
 
-    //celui du milieu (i = 0) + 6 autres tous les 60 degres
-    for (int i{0}; i < 7; i++)
+    //celui du milieu
+    dessiner_cercle(image, centre_x, centre_y, rayon, thickness);
+
+    //6 autres tous les 60 degres
+    for (int i{1}; i <= 6; i++)
     {
-        float cx = centre_x;
-        float cy = centre_y;
-        if (i > 0){
-            float angle = i * 2 * pi / 6;
-            cx = centre_x + rayon * std::cos(angle);
-            cy = centre_y + rayon * std::sin(angle);
-        }
-        for (int y{0}; y < image.height(); y++)
-        {
-            for (int x{0}; x < image.width(); x++)
-            {
-                float distance = std::sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy));
-                if (distance >= rayon - thickness / 2 && distance <= rayon + thickness / 2){
-                    image.pixel(x, y).r = 1.f;
-                    image.pixel(x, y).g = 1.f;
-                    image.pixel(x, y).b = 1.f;
-                }
-            }
-        }
+        float angle = i * 2 * pi / 6;
+        float cx = centre_x + rayon * std::cos(angle);
+        float cy = centre_y + rayon * std::sin(angle);
+        dessiner_cercle(image, cx, cy, rayon, thickness);
     }
     image.save("output/rosace.png");
 }
@@ -276,7 +254,7 @@ void exo_mosaique(){
         {
             nouvelle.pixel(x, y) = image.pixel(x % image.width(), y % image.height());
         }
-    } 
+    }
     nouvelle.save("output/mosaique.png");
 }
 
@@ -326,22 +304,12 @@ void exo_glitch(){
 
 //degrade couleur
 void exo_degrade_couleur(){
-    sil::Image image{300, 200};
-    glm::vec3 couleur_gauche{1.f, 0.f, 1.f};
-    glm::vec3 couleur_droite{0.f, 1.f, 1.f}; 
-
-    for (int y{0}; y < image.height(); y++)
-    {
-        for (int x{0}; x < image.width(); x++)
-        {
-            float t = (float)(x) / (image.width() - 1);
-            image.pixel(x, y) = glm::mix(couleur_gauche, couleur_droite, t);
-        }
-    }
-    image.save("output/gradende_couleur.png");
+    degrade({1.f, 0.f, 1.f}, {0.f, 1.f, 1.f}).save("output/gradende_couleur.png");
 }
 
-//conversions pour le Lab (Oklab)
+// ---------- Lab ---------- //
+
+//conversions  Lab (Oklab)
 float srgb_vers_lineaire(float c){
     if (c <= 0.04045f) return c / 12.92f;
     return std::pow((c + 0.055f) / 1.055f, 2.4f);
@@ -387,19 +355,7 @@ glm::vec3 oklab_vers_srgb(glm::vec3 lab){
 
 //degrade rouge vert (sRGB)
 void exo_degrade_rouge_vert(){
-    sil::Image image{300, 200};
-    glm::vec3 couleur_gauche{1.f, 0.f, 0.f};
-    glm::vec3 couleur_droite{0.f, 1.f, 0.f};
-
-    for (int y{0}; y < image.height(); y++)
-    {
-        for (int x{0}; x < image.width(); x++)
-        {
-            float t = (float)(x) / (image.width() - 1);
-            image.pixel(x, y) = glm::mix(couleur_gauche, couleur_droite, t);
-        }
-    }
-    image.save("output/degrade_rouge_vert.png");
+    degrade({1.f, 0.f, 0.f}, {0.f, 1.f, 0.f}).save("output/degrade_rouge_vert.png");
 }
 
 //degrade lab
@@ -420,7 +376,8 @@ void exo_degrade_lab(){
     image.save("output/degrade_lab.png");
 }
 
-//tramage
+// ---------- tramage ---------- //
+
 void exo_tramage(){
     sil::Image image{"images/photo.jpg"};
     float bayer[4][4] = {
@@ -434,22 +391,19 @@ void exo_tramage(){
     {
         for (int x{0}; x < image.width(); x++)
         {
-            glm::vec3 color = image.pixel(x, y);
-            float gris = 0.2126f * color.r
-                       + 0.7152f * color.g
-                       + 0.0722f * color.b;
+            float gris = niveau_de_gris(image.pixel(x, y));
             float seuil = (bayer[y % 4][x % 4] + 0.5f) / 16.f;
             float valeur = 0.f;
             if (gris > seuil){
                 valeur = 1.f;
             }
-            image.pixel(x, y).r = valeur;
-            image.pixel(x, y).g = valeur;
-            image.pixel(x, y).b = valeur;
+            image.pixel(x, y) = glm::vec3{valeur, valeur, valeur};
         }
     }
     image.save("output/tramage.png");
 }
+
+// ---------- convolutions ---------- //
 
 //convolution
 sil::Image convolution(sil::Image image, std::vector<std::vector<float>> kernel){
@@ -468,7 +422,7 @@ sil::Image convolution(sil::Image image, std::vector<std::vector<float>> kernel)
                 {
                     int x_voisin = x + i;
                     int y_voisin = y + j;
-                    //si on sort de l'image  on prend le pixel du bord
+                    //si on sort de l'image on prend le pixel du bord
                     if (x_voisin < 0) x_voisin = 0;
                     if (x_voisin > image.width() - 1) x_voisin = image.width() - 1;
                     if (y_voisin < 0) y_voisin = 0;
@@ -483,24 +437,17 @@ sil::Image convolution(sil::Image image, std::vector<std::vector<float>> kernel)
     return nouvelle;
 }
 
-//box blur
-void exo_box_blur(){
-    sil::Image image{"images/logo.png"};
-    int rayon{5};
+//kernel de box blur (carre, toutes les cases pareilles)
+std::vector<std::vector<float>> kernel_box_blur(int rayon){
     int taille = 2 * rayon + 1;
     float poids = 1.f / (taille * taille);
-    std::vector<std::vector<float>> kernel(taille, std::vector<float>(taille, poids));
-
-    convolution(image, kernel).save("output/box_blur.png");
+    return std::vector<std::vector<float>>(taille, std::vector<float>(taille, poids));
 }
 
-
-
-//box blur separe (horizontal puis vertical)
+//box blur separe horizontal puis vertical.
 sil::Image flou_separe(sil::Image image, int rayon){
     int taille = 2 * rayon + 1;
     float poids = 1.f / taille;
-
     //1 ligne de taille cases
     std::vector<std::vector<float>> kernel_horizontal(1, std::vector<float>(taille, poids));
     //taille lignes de 1 case
@@ -510,30 +457,24 @@ sil::Image flou_separe(sil::Image image, int rayon){
     return convolution(horizontal, kernel_vertical);
 }
 
+//box blur
+void exo_box_blur(){
+    sil::Image image{"images/logo.png"};
+    convolution(image, kernel_box_blur(5)).save("output/box_blur.png");
+}
+
 //filtres separables
 void exo_filtres_separables(){
     sil::Image image{"images/logo.png"};
     int rayon{50};
-    int taille = 2 * rayon + 1;
-    float poids = 1.f / (taille * taille);
-    std::vector<std::vector<float>> kernel(taille, std::vector<float>(taille, poids));
-
-    convolution(image, kernel).save("output/box_blur_naif.png");
+    convolution(image, kernel_box_blur(rayon)).save("output/box_blur_naif.png");
     flou_separe(image, rayon).save("output/box_blur_separe.png");
 }
 
 //difference de gaussiennes
 void exo_difference_gaussiennes(){
     sil::Image image{"images/photo.jpg"};
-
-    for (glm::vec3& color : image.pixels()){
-        float gris = 0.2126f * color.r
-                   + 0.7152f * color.g
-                   + 0.0722f * color.b;
-        color.r = gris;
-        color.g = gris;
-        color.b = gris;
-    }
+    noir_et_blanc(image);
 
     sil::Image flou_petit = flou_separe(image, 1);
     sil::Image flou_grand = flou_separe(image, 3);
@@ -549,9 +490,7 @@ void exo_difference_gaussiennes(){
             if (difference > seuil){
                 valeur = 1.f;
             }
-            image.pixel(x, y).r = valeur;
-            image.pixel(x, y).g = valeur;
-            image.pixel(x, y).b = valeur;
+            image.pixel(x, y) = glm::vec3{valeur, valeur, valeur};
         }
     }
     image.save("output/difference_gaussiennes.png");
@@ -584,7 +523,6 @@ int main(){
     exo_degrade_lab();
     exo_tramage();
     exo_box_blur();
-    exo_nettete_contours();
     exo_filtres_separables();
     exo_difference_gaussiennes();
 }
