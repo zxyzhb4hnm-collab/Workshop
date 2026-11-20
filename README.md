@@ -25,10 +25,12 @@
 - ⭐⭐⭐
   - [Rosace](#rosace)
   - [Glitch](#glitch)
+  - [Tri de pixels](#tri-de-pixels)
 
 - ⭐⭐⭐(⭐)
   - [Dégradés couleur](#dégradés-couleur)
   - [Tramage](#tramage)
+  - [Fractale de Mandelbrot](#fractale-de-mandelbrot)
 
 - ⭐⭐⭐⭐
   - [Mosaïque miroir](#mosaïque-miroir)
@@ -42,22 +44,30 @@
 
 ### Ne garder que le vert
 
-![vert](./output/vert.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![vert](./output/vert.png) | ![logo](./images/logo.png) |
 
 
 ### Échanger les canaux
 
-![swap](./output/swap.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![swap](./output/swap.png) | ![logo](./images/logo.png) |
 
 
 ### Noir & Blanc
 
-![noir et blanc](./output/n&b.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![noir et blanc](./output/n&b.png) | ![logo](./images/logo.png) |
 
 
 ### Négatif
 
-![négatif](./output/negatif.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![négatif](./output/negatif.png) | ![logo](./images/logo.png) |
 
 
 ### Dégradé
@@ -69,28 +79,37 @@
 
 ### Miroir
 
-![miroir](./output/miroir.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![miroir](./output/miroir.png) | ![logo](./images/logo.png) |
 
 
 ### Image bruitée
 
-![bruitée](./output/bruitee.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![bruitée](./output/bruitee.png) | ![logo](./images/logo.png) |
 
 
 ### Rotation de 90°
 
-![rotation](./output/rotation.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![rotation](./output/rotation.png) | ![logo](./images/logo.png) |
 
 
 ### RGB split
 
-![rgb split](./output/rgb_split.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![rgb split](./output/rgb_split.png) | ![logo](./images/logo.png) |
 
 
 ### Luminosité
 
-![éclaircie](./output/eclaircie.png)
-![assombrie](./output/assombrie.png)
+| Éclaircie | Assombrie | Base |
+|:---:|:---:|:---:|
+| ![éclaircie](./output/eclaircie.png) | ![assombrie](./output/assombrie.png) | ![photo](./images/photo.jpg) |
 
 
 ### Cercle
@@ -105,7 +124,9 @@
 
 ### Mosaïque
 
-![mosaïque](./output/mosaique.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![mosaïque](./output/mosaique.png) | ![logo](./images/logo.png) |
 
 
 ## ⭐⭐(⭐)
@@ -120,46 +141,72 @@
 ### Rosace
 
 ![rosace](./output/rosace.png)
+
 * ah ben y'avais de la trigo quoi ... mais bon ça rappelle que de bon souvenir *
+
 
 ### Glitch
 
-![glitch](./output/glitch.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![glitch](./output/glitch.png) | ![logo](./images/logo.png) |
+
+
+### Tri de pixels
+
+| Tous les pixels | Par ligne | Parties aléatoires | Base |
+|:---:|:---:|:---:|:---:|
+| ![tri tout](./output/tri_pixels_tout.png) | ![tri lignes](./output/tri_pixels_lignes.png) | ![tri aléatoire](./output/tri_pixels_aleatoire.png) | ![logo](./images/logo.png) |
 
 
 ## ⭐⭐⭐(⭐)
 
 ### Dégradés couleur
 
-![dégradé couleur](./output/gradende_couleur.png)
-![dégradé rouge vert](./output/degrade_rouge_vert.png)
-![dégradé lab](./output/degrade_lab.png)
+| Couleur | Rouge → vert (sRGB) | Rouge → vert (Lab) |
+|:---:|:---:|:---:|
+| ![dégradé couleur](./output/gradende_couleur.png) | ![dégradé rouge vert](./output/degrade_rouge_vert.png) | ![dégradé lab](./output/degrade_lab.png) |
 
 
 ### Tramage
 
-![tramage](./output/tramage.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![tramage](./output/tramage.png) | ![photo](./images/photo.jpg) |
+
+
+### Fractale de Mandelbrot
+
+![mandelbrot](./output/mandelbrot.png)
 
 
 ## ⭐⭐⭐⭐
 
 ### Mosaïque miroir
 
-![mosaïque miroir](./output/mosaique_miroir.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![mosaïque miroir](./output/mosaique_miroir.png) | ![logo](./images/logo.png) |
+
 * pris du temps à décoder mathématiquement comment faire pour les miroirs mais une fois fait pas de soucis pour le code *
 
 
 ### Convolutions
 
-![box blur](./output/box_blur.png)
+| Box blur | Base |
+|:---:|:---:|
+| ![box blur](./output/box_blur.png) | ![logo](./images/logo.png) |
 
 
 ### Filtres séparables
 
-![box blur naïf](./output/box_blur_naif.png)
-![box blur séparé](./output/box_blur_separe.png)
+| Naïf | Séparé | Base |
+|:---:|:---:|:---:|
+| ![box blur naïf](./output/box_blur_naif.png) | ![box blur séparé](./output/box_blur_separe.png) | ![logo](./images/logo.png) |
 
 
 ### Différence de gaussiennes
 
-![différence de gaussiennes](./output/difference_gaussiennes.png)
+| Filtre | Base |
+|:---:|:---:|
+| ![différence de gaussiennes](./output/difference_gaussiennes.png) | ![photo](./images/photo.jpg) |

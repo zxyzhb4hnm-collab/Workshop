@@ -1,6 +1,10 @@
 #include <sil/sil.hpp>
 #include "random.hpp"
 #include <vector>
+#include <algorithm>
+#include <complex>
+#include <string>
+#include <cmath>
 
 // ---------- fonctions principales ---------- //
 
@@ -302,6 +306,56 @@ void exo_glitch(){
     image.save("output/glitch.png");
 }
 
+// ---------- tri de pixels ---------- //
+
+bool plus_sombre(glm::vec3 const& couleur1, glm::vec3 const& couleur2){
+    return niveau_de_gris(couleur1) < niveau_de_gris(couleur2);
+}
+
+//trier tous les pixels
+void exo_tri_pixels_tout(){
+    sil::Image image{"images/logo.png"};
+    std::vector<glm::vec3>& pixels = image.pixels();
+
+    std::sort(pixels.begin(), pixels.end(), plus_sombre);
+
+    image.save("output/tri_pixels_tout.png");
+}
+
+//trier les lignes
+void exo_tri_pixels_lignes(){
+    sil::Image image{"images/logo.png"};
+    std::vector<glm::vec3>& pixels = image.pixels();
+    int largeur = image.width();
+
+    //les pixels sont ranges ligne par ligne : la ligne y va de y*largeur a (y+1)*largeur
+    for (int y{0}; y < image.height(); y++)
+    {
+        std::sort(pixels.begin() + y * largeur, pixels.begin() + (y + 1) * largeur, plus_sombre);
+    }
+
+    image.save("output/tri_pixels_lignes.png");
+}
+
+//trier des parties aleatoires
+void exo_tri_pixels_aleatoire(){
+    sil::Image image{"images/logo.png"};
+    std::vector<glm::vec3>& pixels = image.pixels();
+    int largeur = image.width();
+
+    for (int i{0}; i < 3000; i++)
+    {
+        int y        = random_int(0, image.height() - 1);
+        int x_debut  = random_int(0, largeur - 1);
+        int longueur = random_int(10, 80);
+        int x_fin    = std::min(x_debut + longueur, largeur); //pas deborder sur la ligne suivante
+
+        std::sort(pixels.begin() + y * largeur + x_debut, pixels.begin() + y * largeur + x_fin, plus_sombre);
+    }
+
+    image.save("output/tri_pixels_aleatoire.png");
+}
+
 //degrade couleur
 void exo_degrade_couleur(){
     degrade({1.f, 0.f, 1.f}, {0.f, 1.f, 1.f}).save("output/gradende_couleur.png");
@@ -401,6 +455,37 @@ void exo_tramage(){
         }
     }
     image.save("output/tramage.png");
+}
+
+// ---------- mandelbrot ---------- //
+
+void exo_mandelbrot(){
+    sil::Image image{500, 500};
+    int max_iterations{50};
+
+    for (int y{0}; y < image.height(); y++)
+    {
+        for (int x{0}; x < image.width(); x++)
+        {
+            //pixel (0..500) -> nombre complexe (-2..2)
+            float re = (float)(x) / image.width()  * 4.f - 2.f;
+            float im = (float)(y) / image.height() * 4.f - 2.f;
+            std::complex<float> c{re, im};
+
+            std::complex<float> z{0.f, 0.f};
+            int i{0};
+            while (i < max_iterations && std::abs(z) <= 2.f)
+            {
+                z = z * z + c;
+                i++;
+            }
+
+            //gris selon le nombre d'iterations, blanc si on atteint le max (dans la fractale)
+            float gris = (float)(i) / max_iterations;
+            image.pixel(x, y) = glm::vec3{gris, gris, gris};
+        }
+    }
+    image.save("output/mandelbrot.png");
 }
 
 // ---------- convolutions ---------- //
@@ -518,10 +603,14 @@ int main(){
     exo_mosaique();
     exo_mosaique_miroir();
     exo_glitch();
+    exo_tri_pixels_tout();
+    exo_tri_pixels_lignes();
+    exo_tri_pixels_aleatoire();
     exo_degrade_couleur();
     exo_degrade_rouge_vert();
     exo_degrade_lab();
     exo_tramage();
+    exo_mandelbrot();
     exo_box_blur();
     exo_filtres_separables();
     exo_difference_gaussiennes();
